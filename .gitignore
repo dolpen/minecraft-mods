@@ -1,0 +1,11 @@
+# IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Gradle
+.gradle/
+build/
+run/
+

@@ -1,0 +1,16 @@
+[
+{
+  "modid": "dolpenext",
+  "name": "Dolpen Extras",
+  "description": "dolpen extra utils",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["dolpen"],
+  "credits": "na",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
