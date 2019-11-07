@@ -65,6 +65,7 @@ public class BlockUtil {
         Block block = seeingBlockState.getBlock();
         if (block.isAir(seeingBlockState, world, seeingPos)) {
             // double_plants の上部対策
+            world.notifyBlockUpdate(seeingPos, seeingBlockState, Blocks.AIR.getDefaultState(), 3);
             world.markBlockRangeForRenderUpdate(seeingPos, seeingPos);
             return false;
         }
