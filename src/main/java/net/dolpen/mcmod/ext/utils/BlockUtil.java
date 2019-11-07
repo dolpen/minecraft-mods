@@ -63,22 +63,15 @@ public class BlockUtil {
      */
     private static boolean processDestroy(World world, BlockPos seeingPos, IBlockState seeingBlockState, boolean dropBlock) {
         Block block = seeingBlockState.getBlock();
-        if (block.isAir(seeingBlockState, world, seeingPos)) {
-            // double_plants の上部対策
-            world.notifyBlockUpdate(seeingPos, seeingBlockState, Blocks.AIR.getDefaultState(), 3);
-            world.markBlockRangeForRenderUpdate(seeingPos, seeingPos);
-            return false;
-        }
         // ここで音を再生しない
         // ここで Fortune を適用しないのは確定取得ブロックだから(適用すると dupe になる)
-        if (dropBlock)
+        if (!block.isAir(seeingBlockState, world, seeingPos) && dropBlock)
             block.dropBlockAsItem(world, seeingPos, seeingBlockState, 0);
-        if (!world.setBlockState(seeingPos, Blocks.AIR.getDefaultState(), 3)) return false;
+        boolean result = world.setBlockState(seeingPos, Blocks.AIR.getDefaultState(), 3);
         // 本当にこうしないと、任意のブロックからAIRへの差分はクライアントサイド/スレッドに通知されない!!!
         world.notifyBlockUpdate(seeingPos, seeingBlockState, Blocks.AIR.getDefaultState(), 3);
         world.markBlockRangeForRenderUpdate(seeingPos, seeingPos);
-        return true;
-
+        return result;
     }
 
     /**
@@ -134,14 +127,11 @@ public class BlockUtil {
         consumeHoeHealth(player, mainHandStack);
         BlockPos myFoot = Positions.foot(player);
         cultivateBlock(world, seeingPos);
-        BlockPos upperPos = seeingPos.up();
-        IBlockState upperBlockState = world.getBlockState(upperPos);
-        while (
-                BlockStateGroup.HOE_REMOVABLE.contains(upperBlockState)
-                        && eraseBrock(world, player, upperPos, upperBlockState, mainHandStack, myFoot)
-        ) {
-            upperPos = seeingPos.up();
-            upperBlockState = world.getBlockState(upperPos);
+        for (int y = 1; y <= 2; y++) {
+            BlockPos upperPos = seeingPos.up(y);
+            IBlockState upperBlockState = world.getBlockState(upperPos);
+            if (!BlockStateGroup.HOE_REMOVABLE.contains(upperBlockState)) continue;
+            eraseBrock(world, player, upperPos, upperBlockState, mainHandStack, myFoot);
         }
         return true;
     }
