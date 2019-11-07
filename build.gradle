@@ -11,6 +11,12 @@ buildscript {
 // Gradle Plugin
 apply plugin: 'net.minecraftforge.gradle.forge'
 
+
+// MOD Configuration
+version = ""
+group = "net.dolpen.mcmods"
+archivesBaseName = "dolpenext"
+
 // javac
 
 sourceCompatibility = targetCompatibility = "1.8"
@@ -43,10 +49,6 @@ test {
     useJUnitPlatform()
 }
 
-// MOD Configuration
-version = ""
-group = "net.dolpen.mcmods"
-archivesBaseName = "dolpenext"
 
 dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-api:5.3.1"
