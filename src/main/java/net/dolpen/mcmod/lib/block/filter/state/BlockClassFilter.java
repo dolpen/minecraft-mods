@@ -1,20 +1,20 @@
-package net.dolpen.mcmod.lib.block.filter;
+package net.dolpen.mcmod.lib.block.filter.state;
 
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 
-public class ClassMatchRule<T extends Block> implements IMatchRule {
+public class BlockClassFilter<T extends Block> implements IBlockStateFilter {
 
 
     public final Class<T> parent;
 
-    private ClassMatchRule(Class<T> parent) {
+    private BlockClassFilter(Class<T> parent) {
         this.parent = parent;
     }
 
-    public static <T extends Block> ClassMatchRule<T> of(Class<T> parent) {
-        return new ClassMatchRule<>(parent);
+    public static <T extends Block> BlockClassFilter<T> of(Class<T> parent) {
+        return new BlockClassFilter<>(parent);
     }
 
     @Override

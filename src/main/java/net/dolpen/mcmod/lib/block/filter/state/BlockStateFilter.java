@@ -1,4 +1,4 @@
-package net.dolpen.mcmod.lib.block.filter;
+package net.dolpen.mcmod.lib.block.filter.state;
 
 
 import net.minecraft.block.Block;
@@ -10,22 +10,22 @@ import net.minecraftforge.oredict.OreDictionary;
 import java.util.Arrays;
 import java.util.Optional;
 
-public class BlockMatchRule implements IMatchRule {
+public class BlockStateFilter implements IBlockStateFilter {
 
     public final Type type;
     public final String prefix;
 
-    private BlockMatchRule(Type type, String prefix) {
+    private BlockStateFilter(Type type, String prefix) {
         this.prefix = prefix;
         this.type = type;
     }
 
-    public static BlockMatchRule ofName(String prefix) {
-        return new BlockMatchRule(Type.NAME, prefix);
+    public static BlockStateFilter ofName(String prefix) {
+        return new BlockStateFilter(Type.NAME, prefix);
     }
 
-    public static BlockMatchRule ofDict(String prefix) {
-        return new BlockMatchRule(Type.DICT, prefix);
+    public static BlockStateFilter ofDict(String prefix) {
+        return new BlockStateFilter(Type.DICT, prefix);
     }
 
     @Override

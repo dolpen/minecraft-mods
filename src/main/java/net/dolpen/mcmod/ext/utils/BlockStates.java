@@ -1,6 +1,6 @@
 package net.dolpen.mcmod.ext.utils;
 
-import net.dolpen.mcmod.ext.models.matcher.BlockStateGroup;
+import net.dolpen.mcmod.ext.models.BlockStateGroup;
 import net.dolpen.mcmod.lib.lang.ArrayUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;

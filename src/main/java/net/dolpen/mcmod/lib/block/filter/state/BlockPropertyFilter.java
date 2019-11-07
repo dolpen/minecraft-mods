@@ -1,4 +1,4 @@
-package net.dolpen.mcmod.lib.block.filter;
+package net.dolpen.mcmod.lib.block.filter.state;
 
 
 import com.google.common.collect.Sets;
@@ -7,19 +7,19 @@ import net.minecraft.block.state.IBlockState;
 
 import java.util.Set;
 
-public class PropertyMatchRule<T extends Comparable<T>> implements IMatchRule {
+public class BlockPropertyFilter<T extends Comparable<T>> implements IBlockStateFilter {
 
 
     public final IProperty<T> property;
     public final Set<T> values;
 
-    private PropertyMatchRule(IProperty<T> property, T... values) {
+    private BlockPropertyFilter(IProperty<T> property, T... values) {
         this.property = property;
         this.values = Sets.newHashSet(values);
     }
 
-    public static <T extends Comparable<T>> PropertyMatchRule<T> of(IProperty<T> property, T... values) {
-        return new PropertyMatchRule<>(property, values);
+    public static <T extends Comparable<T>> BlockPropertyFilter<T> of(IProperty<T> property, T... values) {
+        return new BlockPropertyFilter<>(property, values);
     }
 
     @Override

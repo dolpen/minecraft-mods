@@ -1,20 +1,20 @@
-package net.dolpen.mcmod.lib.block.filter;
+package net.dolpen.mcmod.lib.block.filter.state;
 
 
 import net.minecraft.block.state.IBlockState;
 
-public class ToolMatchRule implements IMatchRule {
-    public static final ToolMatchRule MINE = of(Type.MINE);
-    public static final ToolMatchRule DIG = of(Type.DIG);
-    public static final ToolMatchRule CUT = of(Type.CUT);
+public class BlockBreakToolFilter implements IBlockStateFilter {
+    public static final BlockBreakToolFilter MINE = of(Type.MINE);
+    public static final BlockBreakToolFilter DIG = of(Type.DIG);
+    public static final BlockBreakToolFilter CUT = of(Type.CUT);
     public final Type type;
 
-    private ToolMatchRule(Type type) {
+    private BlockBreakToolFilter(Type type) {
         this.type = type;
     }
 
-    private static ToolMatchRule of(Type type) {
-        return new ToolMatchRule(type);
+    private static BlockBreakToolFilter of(Type type) {
+        return new BlockBreakToolFilter(type);
     }
 
     @Override

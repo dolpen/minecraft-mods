@@ -1,6 +1,7 @@
 package net.dolpen.mcmod.ext.utils;
 
-import net.dolpen.mcmod.ext.models.matcher.BlockStateGroup;
+import net.dolpen.mcmod.ext.models.BlockStateGroup;
+import net.dolpen.mcmod.lib.block.position.Positions;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
@@ -19,8 +20,6 @@ import java.util.Objects;
 public class BlockUtil {
     /**
      * クワの耐久を消費します
-     *
-     * @return 今回使用可能なら true
      */
     private static void consumeHoeHealth(EntityPlayer player, ItemStack mainHandStack) {
         if (Objects.isNull(mainHandStack)) return;
@@ -64,7 +63,11 @@ public class BlockUtil {
      */
     private static boolean processDestroy(World world, BlockPos seeingPos, IBlockState seeingBlockState, boolean dropBlock) {
         Block block = seeingBlockState.getBlock();
-        if (block.isAir(seeingBlockState, world, seeingPos)) return false;
+        if (block.isAir(seeingBlockState, world, seeingPos)) {
+            // double_plants の上部対策
+            world.markBlockRangeForRenderUpdate(seeingPos, seeingPos);
+            return false;
+        }
         // ここで音を再生しない
         // ここで Fortune を適用しないのは確定取得ブロックだから(適用すると dupe になる)
         if (dropBlock)

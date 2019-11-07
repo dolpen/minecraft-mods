@@ -1,6 +1,6 @@
-package net.dolpen.mcmod.ext.models.matcher;
+package net.dolpen.mcmod.ext.models;
 
-import net.dolpen.mcmod.lib.block.filter.*;
+import net.dolpen.mcmod.lib.block.filter.state.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockDirt;
@@ -16,33 +16,33 @@ public class BlockStateGroup {
 
     /*
      鉱石辞書 の dirt カテゴリは荒れた土やポドゾルのバリアントを含まないので OR 検索しています
-     ここが何とかなれば BlockMatchRule.ofName("minecraft:dirt") はいらなくなるはずです
+     ここが何とかなれば BlockStateFilter.ofName("minecraft:dirt") はいらなくなるはずです
      dirt + grass は繋がります。
      gravel は個別です、 sand は色違いが一気に取れます
      MODでこれらに追加してるものは対応するでしょう
      */
     public static final BlockStateGroup[] DIG_CHAIN = new BlockStateGroup[]{
             of(
-                    CompositeRule.all(
-                            CompositeRule.any(
-                                    BlockMatchRule.ofName("minecraft:dirt"),
-                                    BlockMatchRule.ofDict("dirt"),
-                                    BlockMatchRule.ofDict("grass")
+                    CompositeBlockStateFilter.all(
+                            CompositeBlockStateFilter.any(
+                                    BlockStateFilter.ofName("minecraft:dirt"),
+                                    BlockStateFilter.ofDict("dirt"),
+                                    BlockStateFilter.ofDict("grass")
                             ),
-                            ToolMatchRule.DIG
+                            BlockBreakToolFilter.DIG
                     )
 
             ),
             of(
-                    CompositeRule.all(
-                            BlockMatchRule.ofDict("sand"),
-                            ToolMatchRule.DIG
+                    CompositeBlockStateFilter.all(
+                            BlockStateFilter.ofDict("sand"),
+                            BlockBreakToolFilter.DIG
                     )
             ),
             of(
-                    CompositeRule.all(
-                            BlockMatchRule.ofDict("gravel"),
-                            ToolMatchRule.DIG
+                    CompositeBlockStateFilter.all(
+                            BlockStateFilter.ofDict("gravel"),
+                            BlockBreakToolFilter.DIG
                     )
             )
     };
@@ -51,13 +51,13 @@ public class BlockStateGroup {
 
 
     public static final BlockStateGroup MINE_RS_CHAIN = BlockStateGroup.of(
-            CompositeRule.anyName(
+            CompositeBlockStateFilter.anyName(
                     "minecraft:lit_redstone_ore",
                     "minecraft:redstone_ore"
             )
     );
     public static final BlockStateGroup MINE_BLOCK_CHAIN = of(
-            BlockMatchRule.ofName("minecraft:obsidian")
+            BlockStateFilter.ofName("minecraft:obsidian")
     );
 
     /*
@@ -68,9 +68,9 @@ public class BlockStateGroup {
      */
     public static final BlockStateGroup MINE_TRIGGER = union(
             of(
-                    CompositeRule.all(
-                            BlockMatchRule.ofDict("ore"),
-                            ToolMatchRule.MINE
+                    CompositeBlockStateFilter.all(
+                            BlockStateFilter.ofDict("ore"),
+                            BlockBreakToolFilter.MINE
                     )
             ),
             MINE_RS_CHAIN,
@@ -81,9 +81,9 @@ public class BlockStateGroup {
     鉱石辞書依存です、切って欲しければ入れてください
      */
     public static final BlockStateGroup CUT_TRIGGER = of(
-            CompositeRule.all(
-                    BlockMatchRule.ofDict("log"),
-                    ToolMatchRule.CUT
+            CompositeBlockStateFilter.all(
+                    BlockStateFilter.ofDict("log"),
+                    BlockBreakToolFilter.CUT
             )
     );
 
@@ -91,7 +91,7 @@ public class BlockStateGroup {
     葉っぱは殴って取った扱いになります、殴れない葉っぱとかは想定してないです
      */
     public static final BlockStateGroup CUT_LEAVES = of(
-            BlockMatchRule.ofDict("treeLeaves")
+            BlockStateFilter.ofDict("treeLeaves")
     );
 
 
@@ -103,14 +103,14 @@ public class BlockStateGroup {
      鉱石辞書上で grass に入れるか DirtType 指定した上で dirt に入れてください
      */
     public static final BlockStateGroup HOE_TRIGGER = BlockStateGroup.of(
-            CompositeRule.any(
-                    BlockMatchRule.ofDict("grass"),
-                    CompositeRule.all(
-                            CompositeRule.any(
-                                    BlockMatchRule.ofName("minecraft:dirt"),
-                                    BlockMatchRule.ofDict("dirt")
+            CompositeBlockStateFilter.any(
+                    BlockStateFilter.ofDict("grass"),
+                    CompositeBlockStateFilter.all(
+                            CompositeBlockStateFilter.any(
+                                    BlockStateFilter.ofName("minecraft:dirt"),
+                                    BlockStateFilter.ofDict("dirt")
                             ),
-                            PropertyMatchRule.of(
+                            BlockPropertyFilter.of(
                                     BlockDirt.VARIANT,
                                     BlockDirt.DirtType.DIRT,
                                     BlockDirt.DirtType.PODZOL
@@ -129,9 +129,9 @@ public class BlockStateGroup {
     鉱石辞書に適切なカテゴリがあればもう少し簡単に連携やグルーピングができるけれど……
     */
     public static final BlockStateGroup HOE_REMOVABLE = of(
-            CompositeRule.any(
-                    ClassMatchRule.of(BlockBush.class),
-                    BlockMatchRule.ofName("minecraft:air")
+            CompositeBlockStateFilter.any(
+                    BlockClassFilter.of(BlockBush.class),
+                    BlockStateFilter.ofName("minecraft:air")
             )
     );
     //// ------------------------
@@ -142,7 +142,7 @@ public class BlockStateGroup {
         this.states = states;
     }
 
-    static BlockStateGroup of(IMatchRule rule) {
+    static BlockStateGroup of(IBlockStateFilter rule) {
         Set<IBlockState> matchStates = StreamSupport.stream(Block.REGISTRY.spliterator(), false)
                 .flatMap(b -> b.getBlockState().getValidStates().stream())
                 .filter(rule::test)

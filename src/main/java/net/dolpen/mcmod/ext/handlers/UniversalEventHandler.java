@@ -4,11 +4,11 @@ import net.dolpen.mcmod.ext.capabilities.IPlayerStatus;
 import net.dolpen.mcmod.ext.capabilities.PlayerStatus;
 import net.dolpen.mcmod.ext.capabilities.providers.PlayerStatusProvider;
 import net.dolpen.mcmod.ext.capabilities.storages.VoidStorage;
-import net.dolpen.mcmod.ext.models.matcher.BlockStateGroup;
-import net.dolpen.mcmod.ext.models.tasks.CultivateAll;
-import net.dolpen.mcmod.ext.models.tasks.CutAll;
-import net.dolpen.mcmod.ext.models.tasks.DigAll;
-import net.dolpen.mcmod.ext.models.tasks.MineAll;
+import net.dolpen.mcmod.ext.models.BlockStateGroup;
+import net.dolpen.mcmod.ext.models.tasks.block.CultivateAll;
+import net.dolpen.mcmod.ext.models.tasks.block.CutAll;
+import net.dolpen.mcmod.ext.models.tasks.block.DigAll;
+import net.dolpen.mcmod.ext.models.tasks.block.MineAll;
 import net.dolpen.mcmod.ext.network.ToggleMessage;
 import net.dolpen.mcmod.ext.settings.Constants;
 import net.dolpen.mcmod.lib.network.NetworkManager;
@@ -93,7 +93,7 @@ public abstract class UniversalEventHandler {
         final BlockPos pos = event.getPos();
         final IBlockState blockState = world.getBlockState(pos);
         if (BlockStateGroup.HOE_TRIGGER.contains(blockState)) {
-            doTask(world, () -> new CultivateAll(world, player, pos, blockState).execute());
+            doTask(world, new CultivateAll(world, player, pos, blockState));
         }
         /*else {
 
@@ -134,11 +134,11 @@ public abstract class UniversalEventHandler {
             return;
         }
         if (BlockStateGroup.CUT_TRIGGER.contains(blockState)) {
-            doTask(world, () -> new CutAll(world, player, event.getPos(), blockState).execute());
+            doTask(world, new CutAll(world, player, event.getPos(), blockState));
         } else if (BlockStateGroup.DIG_TRIGGER.contains(blockState)) {
-            doTask(world, () -> new DigAll(world, player, event.getPos(), blockState).execute());
+            doTask(world, new DigAll(world, player, event.getPos(), blockState));
         } else if (BlockStateGroup.MINE_TRIGGER.contains(blockState)) {
-            doTask(world, () -> new MineAll(world, player, event.getPos(), blockState).execute());
+            doTask(world, new MineAll(world, player, event.getPos(), blockState));
         }
         //else { player.sendMessage(new TextComponentString("you used effective tool! but " + blockState.toString() + " is not target.")); }
     }

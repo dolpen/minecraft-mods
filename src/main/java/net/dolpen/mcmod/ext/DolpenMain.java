@@ -1,6 +1,6 @@
 package net.dolpen.mcmod.ext;
 
-import net.dolpen.mcmod.ext.models.matcher.BlockStateGroup;
+import net.dolpen.mcmod.ext.models.BlockStateGroup;
 import net.dolpen.mcmod.ext.settings.Configuration;
 import net.dolpen.mcmod.ext.settings.Constants;
 import net.dolpen.mcmod.lib.logger.LogWrapper;
