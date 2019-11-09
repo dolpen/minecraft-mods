@@ -61,12 +61,12 @@ public class BlockUtil {
     /**
      * ブロック破壊消去のコア部分（効果音再生なし）
      */
-    private static boolean processDestroy(World world, BlockPos seeingPos, IBlockState seeingBlockState, boolean dropBlock) {
+    private static boolean processDestroy(World world, EntityPlayer player, BlockPos seeingPos, IBlockState seeingBlockState, ItemStack mainHandStack, BlockPos myFoot, boolean dropBlock) {
         Block block = seeingBlockState.getBlock();
         // ここで音を再生しない
         // ここで Fortune を適用しないのは確定取得ブロックだから(適用すると dupe になる)
         if (!block.isAir(seeingBlockState, world, seeingPos) && dropBlock)
-            block.dropBlockAsItem(world, seeingPos, seeingBlockState, 0);
+            block.harvestBlock(world, player, myFoot, seeingBlockState, null, mainHandStack);
         boolean result = world.setBlockState(seeingPos, Blocks.AIR.getDefaultState(), 3);
         // 本当にこうしないと、任意のブロックからAIRへの差分はクライアントサイド/スレッドに通知されない!!!
         world.notifyBlockUpdate(seeingPos, seeingBlockState, Blocks.AIR.getDefaultState(), 3);
@@ -77,13 +77,11 @@ public class BlockUtil {
     /**
      * ドロップアイテムの処理
      */
-    private static void processDrop(World world, EntityPlayer player, BlockPos seeingPos, IBlockState seeingBlockState, ItemStack mainHandStack) {
+    private static void processDrop(World world, EntityPlayer player, BlockPos seeingPos, IBlockState seeingBlockState, BlockPos myFoot) {
         BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(world, seeingPos, seeingBlockState, player);
         Block seeingBlock = seeingBlockState.getBlock();
-        BlockPos myFoot = Positions.foot(player);
         seeingBlock.onBlockHarvested(world, seeingPos, seeingBlockState, player);
         seeingBlock.onBlockDestroyedByPlayer(world, seeingPos, seeingBlockState);
-        seeingBlock.harvestBlock(world, player, myFoot, seeingBlockState, null, mainHandStack);
         seeingBlock.dropXpOnBlockBreak(world, myFoot, event.getExpToDrop());
     }
 
@@ -94,8 +92,8 @@ public class BlockUtil {
      * @return 今回使用可能なら true
      */
     private static boolean breakBlock(World world, EntityPlayer player, BlockPos seeingPos, IBlockState seeingBlockState, ItemStack mainHandStack, BlockPos myFoot) {
-        if (!processDestroy(world, seeingPos, seeingBlockState, true)) return false;
-        processDrop(world, player, seeingPos, seeingBlockState, mainHandStack);
+        if (!processDestroy(world, player, seeingPos, seeingBlockState, mainHandStack, myFoot, true)) return false;
+        processDrop(world, player, seeingPos, seeingBlockState, myFoot);
         return true;
     }
 
@@ -105,8 +103,8 @@ public class BlockUtil {
      * @return 基本的に true
      */
     private static boolean eraseBrock(World world, EntityPlayer player, BlockPos seeingPos, IBlockState seeingBlockState, ItemStack mainHandStack, BlockPos myFoot) {
-        if (!processDestroy(world, seeingPos, seeingBlockState, false)) return false;
-        processDrop(world, player, seeingPos, seeingBlockState, mainHandStack);
+        if (!processDestroy(world, player, seeingPos, seeingBlockState, mainHandStack, myFoot, false)) return false;
+        processDrop(world, player, seeingPos, seeingBlockState, myFoot);
         return true;
     }
 
