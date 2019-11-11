@@ -1,11 +1,13 @@
 package net.dolpen.mcmod.ext.handlers;
 
+import net.dolpen.mcmod.ext.DolpenMain;
 import net.dolpen.mcmod.ext.capabilities.IPlayerStatus;
 import net.dolpen.mcmod.ext.capabilities.PlayerStatus;
 import net.dolpen.mcmod.ext.capabilities.providers.PlayerStatusProvider;
 import net.dolpen.mcmod.ext.capabilities.storages.VoidStorage;
 import net.dolpen.mcmod.ext.entities.CustomBlocks;
 import net.dolpen.mcmod.ext.entities.blocks.BlockSingleSlotStorage;
+import net.dolpen.mcmod.ext.gui.GuiHandler;
 import net.dolpen.mcmod.ext.models.BlockStateGroup;
 import net.dolpen.mcmod.ext.models.tasks.block.CultivateAll;
 import net.dolpen.mcmod.ext.models.tasks.block.CutAll;
@@ -31,6 +33,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.UseHoeEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -56,6 +59,7 @@ public abstract class UniversalEventHandler {
 
     public void initNetwork() {
         networkManager.registerServerRequest(ToggleHandler.class, ToggleMessage.class);
+        NetworkRegistry.INSTANCE.registerGuiHandler(DolpenMain.getInstance(), new GuiHandler());
         // Capabilityのホストはワールド所有者
         CapabilityManager.INSTANCE.register(
                 IPlayerStatus.class,

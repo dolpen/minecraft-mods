@@ -1,5 +1,6 @@
 package net.dolpen.mcmod.ext;
 
+import net.dolpen.mcmod.ext.gui.GuiHandler;
 import net.dolpen.mcmod.ext.settings.Configuration;
 import net.dolpen.mcmod.ext.settings.Constants;
 import net.dolpen.mcmod.lib.logger.LogWrapper;
@@ -11,6 +12,7 @@ import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import org.apache.logging.log4j.Level;
 
 @Mod(
@@ -59,6 +61,7 @@ public class DolpenMain {
         configuration = loader.load("general", Configuration::new);
         loader.saveIfNeeded();
         proxy.preInit(event);
+
     }
 
     @Mod.EventHandler
