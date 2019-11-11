@@ -1,6 +1,5 @@
 package net.dolpen.mcmod.ext;
 
-import net.dolpen.mcmod.ext.models.BlockStateGroup;
 import net.dolpen.mcmod.ext.settings.Configuration;
 import net.dolpen.mcmod.ext.settings.Constants;
 import net.dolpen.mcmod.lib.logger.LogWrapper;
@@ -8,12 +7,11 @@ import net.dolpen.mcmod.lib.proxy.IModProxy;
 import net.dolpen.mcmod.lib.settings.ConfigurationLoader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.Level;
-
-import java.util.Arrays;
 
 @Mod(
         modid = Constants.MOD_ID,
@@ -46,6 +44,13 @@ public class DolpenMain {
         return configuration;
     }
 
+
+    @Mod.EventHandler
+    //この関数でMODファイル自体をイベントの発火先にする。
+    public void construct(FMLConstructionEvent event) {
+        proxy.construct(event);
+    }
+
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         logger = new LogWrapper(event.getModLog());
@@ -64,15 +69,5 @@ public class DolpenMain {
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         proxy.postInit(event);
-        final LogWrapper logger = getLogger();
-        logger.info("cut-trigger:" + BlockStateGroup.CUT_TRIGGER.toString());
-        logger.info("cut-leaves:" + BlockStateGroup.CUT_LEAVES.toString());
-        logger.info("mine-trigger:" + BlockStateGroup.MINE_TRIGGER.toString());
-        logger.info("dig-trigger:" + BlockStateGroup.DIG_TRIGGER.toString());
-        Arrays.stream(BlockStateGroup.DIG_CHAIN).forEach(g ->
-                logger.info("dig-chain:" + g.toString())
-        );
-        logger.info("hoe-trigger:" + BlockStateGroup.HOE_TRIGGER.toString());
-        logger.info("hoe-removable:" + BlockStateGroup.HOE_REMOVABLE.toString());
     }
 }

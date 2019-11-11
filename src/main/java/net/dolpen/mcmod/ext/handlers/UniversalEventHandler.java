@@ -4,6 +4,8 @@ import net.dolpen.mcmod.ext.capabilities.IPlayerStatus;
 import net.dolpen.mcmod.ext.capabilities.PlayerStatus;
 import net.dolpen.mcmod.ext.capabilities.providers.PlayerStatusProvider;
 import net.dolpen.mcmod.ext.capabilities.storages.VoidStorage;
+import net.dolpen.mcmod.ext.entities.CustomBlocks;
+import net.dolpen.mcmod.ext.entities.blocks.BlockSingleSlotStorage;
 import net.dolpen.mcmod.ext.models.BlockStateGroup;
 import net.dolpen.mcmod.ext.models.tasks.block.CultivateAll;
 import net.dolpen.mcmod.ext.models.tasks.block.CutAll;
@@ -12,16 +14,20 @@ import net.dolpen.mcmod.ext.models.tasks.block.MineAll;
 import net.dolpen.mcmod.ext.network.ToggleMessage;
 import net.dolpen.mcmod.ext.settings.Constants;
 import net.dolpen.mcmod.lib.network.NetworkManager;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.UseHoeEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -46,6 +52,9 @@ public abstract class UniversalEventHandler {
     protected UniversalEventHandler() {
         // 通信
         networkManager = new NetworkManager(Constants.MOD_ID);
+    }
+
+    public void initNetwork() {
         networkManager.registerServerRequest(ToggleHandler.class, ToggleMessage.class);
         // Capabilityのホストはワールド所有者
         CapabilityManager.INSTANCE.register(
@@ -71,6 +80,19 @@ public abstract class UniversalEventHandler {
                 query
         ).isPresent();
     }
+
+
+
+    @SubscribeEvent
+    public void registerItem(RegistryEvent.Register<Item> event) {
+        CustomBlocks.registerAllItemBlock(event.getRegistry());
+    }
+
+    @SubscribeEvent
+    public void registerBlock(RegistryEvent.Register<Block> event) {
+        CustomBlocks.registerAllBlock(event.getRegistry());
+    }
+
 
     @SubscribeEvent
     public void onAttachingEntity(AttachCapabilitiesEvent<Entity> event) {

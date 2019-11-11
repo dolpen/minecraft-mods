@@ -17,7 +17,7 @@ public class PlayerStatusProvider implements ICapabilityProvider {
     public static Capability<IPlayerStatus> INJECTED = null;
 
     // DIされたものから内部保持される、外部に参照しか渡らない
-    private IPlayerStatus instance = INJECTED.getDefaultInstance();
+    private IPlayerStatus instance = INJECTED != null ? INJECTED.getDefaultInstance() : null;
 
     @Override
     public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {

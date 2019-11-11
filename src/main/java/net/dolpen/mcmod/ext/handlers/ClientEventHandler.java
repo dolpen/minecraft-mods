@@ -1,11 +1,13 @@
 package net.dolpen.mcmod.ext.handlers;
 
 
+import net.dolpen.mcmod.ext.entities.CustomBlocks;
 import net.dolpen.mcmod.ext.network.ToggleMessage;
 import net.dolpen.mcmod.ext.settings.Constants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -45,6 +47,11 @@ public class ClientEventHandler extends UniversalEventHandler {
         if (KEY_BINDING_TOGGLE.isPressed()) {
             networkManager.sendToServer(new ToggleMessage());
         }
+    }
+
+    @SubscribeEvent
+    public void registerModels(ModelRegistryEvent event) {
+        CustomBlocks.registerAllModel();
     }
 
 }
