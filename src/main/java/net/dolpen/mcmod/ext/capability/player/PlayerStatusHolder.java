@@ -1,8 +1,8 @@
 package net.dolpen.mcmod.ext.capability.player;
 
+import net.dolpen.mcmod.ext.setting.Constants;
 import net.dolpen.mcmod.lib.capability.CapabilityProvider;
 import net.dolpen.mcmod.lib.capability.storage.VoidStorage;
-import net.dolpen.mcmod.ext.setting.Constants;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;

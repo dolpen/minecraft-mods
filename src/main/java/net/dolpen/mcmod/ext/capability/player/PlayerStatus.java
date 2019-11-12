@@ -23,6 +23,5 @@ public class PlayerStatus implements IPlayerStatus {
     }
 
 
-
 }
 

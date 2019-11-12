@@ -17,6 +17,23 @@ import java.util.ArrayList;
 public class CustomBlocks {
 
     public static final Block infinity_storage = new BlockStorage();
+    public static final ArrayList<Entry> entries = Lists.newArrayList(
+            new Entry("infinity_storage", infinity_storage)
+    );
+
+    public static void registerAllBlock(IForgeRegistry<Block> blockRegistry) {
+        entries.forEach(e -> blockRegistry.register(e.target));
+    }
+
+    public static void registerAllItemBlock(IForgeRegistry<Item> itemRegistry) {
+        entries.forEach(e -> itemRegistry.register(e.toItemBlock()));
+    }
+
+    public static void registerAllModel() {
+        entries.forEach(e -> {
+            ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(e.target), 0, e.toNormalModel());
+        });
+    }
 
     public static class Entry {
         public final String name;
@@ -44,24 +61,6 @@ public class CustomBlocks {
                     new ResourceLocation(Constants.MOD_ID, name), variant
             );
         }
-    }
-
-    public static final ArrayList<Entry> entries = Lists.newArrayList(
-            new Entry("infinity_storage", infinity_storage)
-    );
-
-    public static void registerAllBlock(IForgeRegistry<Block> blockRegistry) {
-        entries.forEach(e -> blockRegistry.register(e.target));
-    }
-
-    public static void registerAllItemBlock(IForgeRegistry<Item> itemRegistry) {
-        entries.forEach(e -> itemRegistry.register(e.toItemBlock()));
-    }
-
-    public static void registerAllModel() {
-        entries.forEach(e -> {
-            ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(e.target), 0, e.toNormalModel());
-        });
     }
 
 }

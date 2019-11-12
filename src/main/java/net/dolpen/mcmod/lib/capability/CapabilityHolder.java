@@ -9,20 +9,6 @@ import java.util.function.Predicate;
 
 public class CapabilityHolder<T> {
 
-    private static class Rule<T> {
-
-        private final Predicate<AttachCapabilitiesEvent<T>> filter;
-        private final Consumer<AttachCapabilitiesEvent<T>> consumer;
-
-        Rule(
-                Predicate<AttachCapabilitiesEvent<T>> filter,
-                Consumer<AttachCapabilitiesEvent<T>> consumer
-        ) {
-            this.filter = filter;
-            this.consumer = consumer;
-        }
-    }
-
     private Set<Rule<T>> rules;
 
     CapabilityHolder() {
@@ -40,5 +26,19 @@ public class CapabilityHolder<T> {
         rules.stream()
                 .filter(rule -> rule.filter.test(event))
                 .forEach(rule -> rule.consumer.accept(event));
+    }
+
+    private static class Rule<T> {
+
+        private final Predicate<AttachCapabilitiesEvent<T>> filter;
+        private final Consumer<AttachCapabilitiesEvent<T>> consumer;
+
+        Rule(
+                Predicate<AttachCapabilitiesEvent<T>> filter,
+                Consumer<AttachCapabilitiesEvent<T>> consumer
+        ) {
+            this.filter = filter;
+            this.consumer = consumer;
+        }
     }
 }

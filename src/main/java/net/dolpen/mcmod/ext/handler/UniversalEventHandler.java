@@ -68,7 +68,7 @@ public abstract class UniversalEventHandler {
         // Capabilityのホストはワールド所有者
         PlayerStatusHolder.register();
 
-        GameRegistry.registerTileEntity(TileStorage.class, new ResourceLocation(Constants.MOD_NAME,"tile_storage"));
+        GameRegistry.registerTileEntity(TileStorage.class, new ResourceLocation(Constants.MOD_NAME, "tile_storage"));
     }
 
     private void doTask(World world, Runnable runnable) {

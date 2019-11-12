@@ -1,5 +1,7 @@
 {
   "variants": {
-    "normal":   { "model": "dolpenext:infinity_storage" }
+    "normal": {
+      "model": "dolpenext:infinity_storage"
+    }
   }
 }

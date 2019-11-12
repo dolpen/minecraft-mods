@@ -20,9 +20,9 @@ public class StorageContainer extends Container {
         this.tile = tile;
         ItemStackHandler handler = tile.getHandler();
         // 搬入
-        addSlotToContainer(new SlotPutOnly(handler, StorageHandler.IN, 8 + 4 * 18, 36));
+        addSlotToContainer(new SlotPutOnly(handler, StorageHandler.IN, 8 + 18, 36));
         // 搬出
-        addSlotToContainer(new SlotTakeOnly(handler, StorageHandler.OUT, 8 + 6 * 18, 36));
+        addSlotToContainer(new SlotTakeOnly(handler, StorageHandler.OUT, 8 + 7 * 18, 36));
         // これ下のやつ
         bindPlayerInventory(playerInventory);
     }
@@ -41,6 +41,11 @@ public class StorageContainer extends Container {
         for (int i = 0; i < 9; i++) {
             addSlotToContainer(new Slot(inventoryPlayer, i, 8 + i * 18, getPlayerInventoryVerticalOffset() + 58));
         }
+    }
+
+    public int getQuantity() {
+        return tile.getHandler().getStackInSlot(StorageHandler.POOL).getCount();
+
     }
 
     public ItemStack transferStackInSlot(EntityPlayer player, int index) {

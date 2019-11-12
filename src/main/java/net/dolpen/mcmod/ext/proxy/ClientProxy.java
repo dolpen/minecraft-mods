@@ -14,6 +14,7 @@ import net.minecraftforge.fml.relauncher.Side;
 public class ClientProxy extends ModProxy {
 
     private final UniversalEventHandler handler = new ClientEventHandler();
+
     @Mod.EventHandler
     public void construct(FMLConstructionEvent event) {
         MinecraftForge.EVENT_BUS.register(handler);

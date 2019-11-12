@@ -10,11 +10,10 @@ import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 
 public class TileStorage extends TileEntity implements ITickable, ICapabilitySerializable<NBTTagCompound> {
 
-    private ItemStackHandler handler;
+    private StorageHandler handler;
 
     public TileStorage() {
         handler = new StorageHandler();
@@ -108,7 +107,7 @@ public class TileStorage extends TileEntity implements ITickable, ICapabilitySer
                 : super.getCapability(capability, facing);
     }
 
-    public ItemStackHandler getHandler() {
+    public StorageHandler getHandler() {
         return handler;
     }
 
