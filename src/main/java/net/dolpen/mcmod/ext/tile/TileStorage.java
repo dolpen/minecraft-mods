@@ -1,5 +1,6 @@
 package net.dolpen.mcmod.ext.tile;
 
+import net.dolpen.mcmod.lib.item.ItemStackUtil;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -31,7 +32,7 @@ public class TileStorage extends TileEntity implements ITickable, ICapabilitySer
                     outStack = inStack.copy();
                     handler.setStackInSlot(StorageHandler.OUT, outStack);
                     handler.setStackInSlot(StorageHandler.IN, ItemStack.EMPTY);
-                } else if (ItemStack.areItemsEqual(inStack, outStack)) {
+                } else if (ItemStackUtil.canMergeStrict(inStack, outStack)) {
                     if (poolStack.isEmpty()) {
                         poolStack = inStack.copy();
                         handler.setStackInSlot(StorageHandler.POOL, poolStack);
@@ -46,7 +47,7 @@ public class TileStorage extends TileEntity implements ITickable, ICapabilitySer
                         outStack.getMaxStackSize() - outStack.getCount()
                 );
                 if (flow > 0) {
-                    if (outStack.isEmpty()) {
+                    if (outStack.isEmpty() || outStack.getCount() == 0) {
                         ItemStack newOut = poolStack.copy();
                         newOut.setCount(flow);
                         handler.setStackInSlot(StorageHandler.OUT, newOut);
@@ -56,9 +57,9 @@ public class TileStorage extends TileEntity implements ITickable, ICapabilitySer
                     // out partial
                     poolStack.shrink(flow);
                 }
-                if (poolStack.getCount() == 0) {
-                    handler.setStackInSlot(StorageHandler.POOL, ItemStack.EMPTY);
-                }
+            }
+            if (poolStack.isEmpty() || poolStack.getCount() <= 0) {
+                handler.setStackInSlot(StorageHandler.POOL, ItemStack.EMPTY);
             }
         } catch (Exception e) {
             e.printStackTrace();

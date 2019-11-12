@@ -1,5 +1,6 @@
 package net.dolpen.mcmod.ext.tile;
 
+import net.dolpen.mcmod.lib.item.ItemStackUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -54,8 +55,7 @@ public class StorageHandler extends ItemStackHandler {
 
     public ItemStack insertItem(int slot, ItemStack inStack, boolean simulate) {
         ItemStack outStack = getStackInSlot(OUT);
-        boolean canInsert = outStack.isEmpty() || ItemStack.areItemsEqual(outStack, inStack);
+        boolean canInsert = outStack.isEmpty() || ItemStackUtil.canMergeStrict(outStack, inStack);
         return canInsert ? super.insertItem(slot, inStack, simulate) : inStack;
     }
-
 }
