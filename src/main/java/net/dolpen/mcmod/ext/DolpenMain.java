@@ -1,18 +1,16 @@
 package net.dolpen.mcmod.ext;
 
-import net.dolpen.mcmod.ext.gui.GuiHandler;
-import net.dolpen.mcmod.ext.settings.Configuration;
-import net.dolpen.mcmod.ext.settings.Constants;
+import net.dolpen.mcmod.ext.setting.Configuration;
+import net.dolpen.mcmod.ext.setting.Constants;
 import net.dolpen.mcmod.lib.logger.LogWrapper;
 import net.dolpen.mcmod.lib.proxy.IModProxy;
-import net.dolpen.mcmod.lib.settings.ConfigurationLoader;
+import net.dolpen.mcmod.lib.setting.ConfigurationLoader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
 import org.apache.logging.log4j.Level;
 
 @Mod(

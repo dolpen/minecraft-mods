@@ -1,6 +1,6 @@
 package net.dolpen.mcmod.ext.gui;
 
-import net.dolpen.mcmod.ext.entities.tiles.TileSingleSlotStorage;
+import net.dolpen.mcmod.ext.tile.TileStorage;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -14,7 +14,7 @@ public class GuiHandler implements IGuiHandler {
     public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
         switch (id) {
             case SSS:
-                return new SingleSlotStorageContainer(player.inventory, (TileSingleSlotStorage) world.getTileEntity(new BlockPos(x, y, z)));
+                return new StorageContainer(player.inventory, (TileStorage) world.getTileEntity(new BlockPos(x, y, z)));
         }
         return null;
     }
@@ -23,7 +23,7 @@ public class GuiHandler implements IGuiHandler {
     public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
         switch (id) {
             case SSS:
-                return new GuiSingleSlotStorageContainer(player.inventory, (TileSingleSlotStorage) world.getTileEntity(new BlockPos(x, y, z)));
+                return new GuiStorageContainer(player.inventory, (TileStorage) world.getTileEntity(new BlockPos(x, y, z)));
         }
         return null;
     }

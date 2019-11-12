@@ -1,7 +1,7 @@
 package net.dolpen.mcmod.ext.proxy;
 
-import net.dolpen.mcmod.ext.handlers.ServerEventHandler;
-import net.dolpen.mcmod.ext.handlers.UniversalEventHandler;
+import net.dolpen.mcmod.ext.handler.ServerEventHandler;
+import net.dolpen.mcmod.ext.handler.UniversalEventHandler;
 import net.dolpen.mcmod.lib.proxy.ModProxy;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
