@@ -24,44 +24,40 @@ public class TileStorage extends TileEntity implements ITickable, ICapabilitySer
         ItemStack inStack = handler.getStackInSlot(StorageHandler.IN);
         ItemStack poolStack = handler.getStackInSlot(StorageHandler.POOL);
         ItemStack outStack = handler.getStackInSlot(StorageHandler.OUT);
-        try {
-            // process input
-            if (!inStack.isEmpty()) {
-                if (outStack.isEmpty()) {
-                    outStack = inStack.copy();
-                    handler.setStackInSlot(StorageHandler.OUT, outStack);
-                    handler.setStackInSlot(StorageHandler.IN, ItemStack.EMPTY);
-                } else if (ItemStackUtil.canMergeStrict(inStack, outStack)) {
-                    if (poolStack.isEmpty()) {
-                        poolStack = inStack.copy();
-                        handler.setStackInSlot(StorageHandler.POOL, poolStack);
-                    } else {
-                        poolStack.grow(inStack.getCount());
-                    }
-                    handler.setStackInSlot(StorageHandler.IN, ItemStack.EMPTY);
+        // process input
+        if (!inStack.isEmpty()) {
+            if (outStack.isEmpty()) {
+                outStack = inStack.copy();
+                handler.setStackInSlot(StorageHandler.OUT, outStack);
+                handler.setStackInSlot(StorageHandler.IN, ItemStack.EMPTY);
+            } else if (ItemStackUtil.canMergeStrict(inStack, outStack)) {
+                if (poolStack.isEmpty()) {
+                    poolStack = inStack.copy();
+                    handler.setStackInSlot(StorageHandler.POOL, poolStack);
+                } else {
+                    poolStack.grow(inStack.getCount());
                 }
+                handler.setStackInSlot(StorageHandler.IN, ItemStack.EMPTY);
             }
-            if (!poolStack.isEmpty()) {
-                int flow = Math.min(poolStack.getCount(),
-                        outStack.getMaxStackSize() - outStack.getCount()
-                );
-                if (flow > 0) {
-                    if (outStack.isEmpty() || outStack.getCount() == 0) {
-                        ItemStack newOut = poolStack.copy();
-                        newOut.setCount(flow);
-                        handler.setStackInSlot(StorageHandler.OUT, newOut);
-                    } else {
-                        outStack.grow(flow);
-                    }
-                    // out partial
-                    poolStack.shrink(flow);
+        }
+        if (!poolStack.isEmpty()) {
+            int flow = Math.min(poolStack.getCount(),
+                    outStack.getMaxStackSize() - outStack.getCount()
+            );
+            if (flow > 0) {
+                if (outStack.isEmpty() || outStack.getCount() == 0) {
+                    ItemStack newOut = poolStack.copy();
+                    newOut.setCount(flow);
+                    handler.setStackInSlot(StorageHandler.OUT, newOut);
+                } else {
+                    outStack.grow(flow);
                 }
+                // out partial
+                poolStack.shrink(flow);
             }
-            if (poolStack.isEmpty() || poolStack.getCount() <= 0) {
-                handler.setStackInSlot(StorageHandler.POOL, ItemStack.EMPTY);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        }
+        if (poolStack.isEmpty() || poolStack.getCount() <= 0) {
+            handler.setStackInSlot(StorageHandler.POOL, ItemStack.EMPTY);
         }
     }
 
@@ -90,7 +86,6 @@ public class TileStorage extends TileEntity implements ITickable, ICapabilitySer
     public void readFromNBTItemStack(ItemStack itemStack) {
         if (!itemStack.hasTagCompound()) return;
         NBTTagCompound tileInfo = itemStack.getTagCompound().getCompoundTag("tileInfo");
-        System.err.println(tileInfo.toString());
         handler.deserializeNBT(tileInfo);
     }
 
@@ -110,10 +105,4 @@ public class TileStorage extends TileEntity implements ITickable, ICapabilitySer
     public StorageHandler getHandler() {
         return handler;
     }
-
-    public String getName() {
-        return "tile_slot_storage";
-    }
-
-
 }

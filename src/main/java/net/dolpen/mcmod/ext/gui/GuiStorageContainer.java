@@ -35,7 +35,7 @@ public class GuiStorageContainer extends GuiContainer {
         int pool = storageHandler.getStackInSlot(StorageHandler.POOL).getCount();
         if (pool <= 0) return;
         this.drawCenteredString(
-                this.mc.fontRenderer,
+                this.fontRenderer,
                 FORMAT.format(
                         storageHandler.getStackInSlot(StorageHandler.POOL).getCount()
                 ) + " + ",

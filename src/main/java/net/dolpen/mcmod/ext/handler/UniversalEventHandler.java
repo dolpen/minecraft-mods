@@ -6,6 +6,7 @@ import net.dolpen.mcmod.ext.capability.player.PlayerStatusHolder;
 import net.dolpen.mcmod.ext.gui.GuiHandler;
 import net.dolpen.mcmod.ext.mod.BlockStateGroup;
 import net.dolpen.mcmod.ext.mod.CustomBlocks;
+import net.dolpen.mcmod.ext.mod.CustomTiles;
 import net.dolpen.mcmod.ext.network.ToggleMessage;
 import net.dolpen.mcmod.ext.setting.Constants;
 import net.dolpen.mcmod.ext.task.block.CultivateAll;
@@ -65,10 +66,8 @@ public abstract class UniversalEventHandler {
     public void initNetwork() {
         networkManager.registerServerRequest(ToggleHandler.class, ToggleMessage.class);
         NetworkRegistry.INSTANCE.registerGuiHandler(DolpenMain.getInstance(), new GuiHandler());
-        // Capabilityのホストはワールド所有者
         PlayerStatusHolder.register();
-
-        GameRegistry.registerTileEntity(TileStorage.class, new ResourceLocation(Constants.MOD_NAME, "tile_storage"));
+        CustomTiles.registerAllTile();
     }
 
     private void doTask(World world, Runnable runnable) {
@@ -121,16 +120,6 @@ public abstract class UniversalEventHandler {
         if (BlockStateGroup.HOE_TRIGGER.contains(blockState)) {
             doTask(world, new CultivateAll(world, player, pos, blockState));
         }
-        /*else {
-
-            player.sendMessage(new TextComponentString(
-                    "you used effective tool! but "
-                            + blockState.toString()
-                            + " is not target."
-            ));
-        }
-        */
-
     }
 
     /**
@@ -149,7 +138,6 @@ public abstract class UniversalEventHandler {
         final IBlockState blockState = event.getState();
         ItemStack held = player.getHeldItemMainhand();
         if (held.isEmpty()) {
-            //player.sendMessage(new TextComponentString("broke by hand!"));
             return;
         }
         boolean usedSuitableTool = held.getItem().getToolClasses(held).stream().anyMatch(
@@ -166,7 +154,6 @@ public abstract class UniversalEventHandler {
         } else if (BlockStateGroup.MINE_TRIGGER.contains(blockState)) {
             doTask(world, new MineAll(world, player, event.getPos(), blockState));
         }
-        //else { player.sendMessage(new TextComponentString("you used effective tool! but " + blockState.toString() + " is not target.")); }
     }
 
     // メッセージを受けてCapabilityの一括破壊フラグを反転する

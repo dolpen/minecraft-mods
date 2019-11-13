@@ -5,7 +5,6 @@ public class Constants {
     public static final String MOD_ID = "dolpenext";
     public static final String MOD_NAME = "Dolpen Extras";
     public static final String MOD_VERSION = "0.0.2";
-
     private static final String KEY_LABEL_PREFIX = MOD_ID + "." + "key";
     public static final String KEY_LABEL_TOGGLE = KEY_LABEL_PREFIX + "." + "toggle";
     private static final String MESSAGE_LABEL_PREFIX = MOD_ID + "." + "message";
