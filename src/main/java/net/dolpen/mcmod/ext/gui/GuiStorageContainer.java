@@ -33,12 +33,9 @@ public class GuiStorageContainer extends GuiContainer {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         int pool = storageHandler.getStackInSlot(StorageHandler.POOL).getCount();
-        if (pool <= 0) return;
         this.drawCenteredString(
-                this.mc.fontRenderer,
-                FORMAT.format(
-                        storageHandler.getStackInSlot(StorageHandler.POOL).getCount()
-                ) + " + ",
+                this.fontRenderer,
+                FORMAT.format(pool) + " + ",
                 this.xSize / 2,
                 36 + 4,
                 0

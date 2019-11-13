@@ -2,8 +2,12 @@ package net.dolpen.mcmod.ext.tile;
 
 import net.dolpen.mcmod.lib.item.ItemStackUtil;
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
@@ -69,6 +73,7 @@ public class TileStorage extends TileEntity implements ITickable, ICapabilitySer
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
         handler.deserializeNBT(compound);
+        markDirty();
     }
 
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
@@ -90,8 +95,8 @@ public class TileStorage extends TileEntity implements ITickable, ICapabilitySer
     public void readFromNBTItemStack(ItemStack itemStack) {
         if (!itemStack.hasTagCompound()) return;
         NBTTagCompound tileInfo = itemStack.getTagCompound().getCompoundTag("tileInfo");
-        System.err.println(tileInfo.toString());
         handler.deserializeNBT(tileInfo);
+        markDirty();
     }
 
 
@@ -115,5 +120,21 @@ public class TileStorage extends TileEntity implements ITickable, ICapabilitySer
         return "tile_slot_storage";
     }
 
+    @Override
+    public SPacketUpdateTileEntity getUpdatePacket() {
+        return new SPacketUpdateTileEntity(this.pos, 0, this.writeToNBT(new NBTTagCompound()));
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
+        super.onDataPacket(net, packet);
+        this.readFromNBT(packet.getNbtCompound());
+    }
+
+    public void sync(EntityPlayer player) {
+        if (!(player instanceof EntityPlayerMP)) return;
+        EntityPlayerMP playerMP = (EntityPlayerMP) player;
+        playerMP.connection.sendPacket(getUpdatePacket());
+    }
 
 }

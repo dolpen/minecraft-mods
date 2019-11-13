@@ -50,6 +50,7 @@ public class StorageHandler extends ItemStackHandler {
             stacks.set(slot, new ItemStack(tag));
             stacks.get(slot).setCount(tag.getInteger("Quantity"));
         }
+        new Throwable(nbt.toString()).printStackTrace();
         onLoad();
     }
 

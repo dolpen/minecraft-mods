@@ -13,6 +13,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -55,6 +56,7 @@ public class BlockStorage extends Block implements ITileEntityProvider {
         TileStorage tile = (TileStorage) world.getTileEntity(pos);
         if (Objects.isNull(tile)) return true;
         if (!player.isSneaking()) {
+            tile.sync(player);
             player.openGui(DolpenMain.getInstance(), GuiHandler.SSS, world, pos.getX(), pos.getY(), pos.getZ());
         }
         return true;
@@ -63,6 +65,7 @@ public class BlockStorage extends Block implements ITileEntityProvider {
 
     @Override
     public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity tileEntity, ItemStack stack) {
+        if(world.isRemote)return;
         if (!(tileEntity instanceof TileStorage)) {
             super.harvestBlock(world, player, pos, state, tileEntity, stack);
         } else {
@@ -77,11 +80,12 @@ public class BlockStorage extends Block implements ITileEntityProvider {
     }
 
     @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        TileStorage tileStorage = (TileStorage) worldIn.getTileEntity(pos);
+    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        if(world.isRemote)return;
+        TileStorage tileStorage = (TileStorage) world.getTileEntity(pos);
         if (Objects.isNull(tileStorage)) return;
         tileStorage.readFromNBTItemStack(stack);
-        worldIn.notifyBlockUpdate(pos, state, state, 3);
+        world.notifyBlockUpdate(pos, state, state, 3);
     }
 
 
