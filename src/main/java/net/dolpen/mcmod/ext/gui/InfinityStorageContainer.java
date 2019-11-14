@@ -19,7 +19,12 @@ public class InfinityStorageContainer extends Container {
     public InfinityStorageContainer(IInventory playerInventory, final TileInfinityStorage tile) {
         this.tile = tile;
         // 搬入
-        addSlotToContainer(new SlotPutOnly(tile, TileInfinityStorage.IN, 8 + 18, 36));
+        addSlotToContainer(new SlotPutOnly(tile, TileInfinityStorage.IN, 8 + 18, 36) {
+            @Override
+            public boolean isItemValid(ItemStack stack) {
+                return tile.isItemValidForSlot(TileInfinityStorage.IN, stack);
+            }
+        });
         // 搬出
         addSlotToContainer(new SlotTakeOnly(tile, TileInfinityStorage.OUT, 8 + 7 * 18, 36));
         // これ下のやつ
