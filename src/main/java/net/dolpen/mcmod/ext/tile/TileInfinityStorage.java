@@ -17,11 +17,11 @@ public class TileInfinityStorage extends TileAdvanceStorage implements ITickable
     public static final int IN = 0;
     public static final int OUT = 1;
     public static final int POOL = 2;
-    private static final int VISIBLE = 2;
-    private static final int SLOTS = 3;
+    private static final int ACCESSIBLE = 2;
+    private static final int VISIBLE = 3;
 
     public TileInfinityStorage() {
-        super(SLOTS);
+        super(VISIBLE);
     }
 
     @Override
@@ -86,18 +86,22 @@ public class TileInfinityStorage extends TileAdvanceStorage implements ITickable
         );
     }
 
-    private boolean validateSlot(int slot) {
+    private boolean validateVisibleSlot(int slot) {
         return slot >= 0 && slot < VISIBLE;
+    }
+
+    private boolean validateAccessibleSlot(int slot) {
+        return slot >= 0 && slot < ACCESSIBLE;
     }
 
     @Override
     public ItemStack getStackInSlot(int slot) {
-        return validateSlot(slot) ? inventory.get(slot) : ItemStack.EMPTY;
+        return validateVisibleSlot(slot) ? inventory.get(slot) : ItemStack.EMPTY;
     }
 
     @Override
     public ItemStack decrStackSize(int slot, int count) {
-        if (!validateSlot(slot)) return ItemStack.EMPTY;
+        if (!validateAccessibleSlot(slot)) return ItemStack.EMPTY;
         ItemStack picked = ItemStackHelper.getAndSplit(inventory, slot, count);
         if (!picked.isEmpty()) markDirty();
         return picked;
@@ -137,7 +141,7 @@ public class TileInfinityStorage extends TileAdvanceStorage implements ITickable
 
     @Override
     public int getField(int id) {
-        if (id < SLOTS) return inventory.get(id).getCount();
+        if (id < VISIBLE) return inventory.get(id).getCount();
         if (id == 3) return inventory.get(OUT).getCount() + inventory.get(POOL).getCount();
         return 0;
     }
@@ -149,7 +153,7 @@ public class TileInfinityStorage extends TileAdvanceStorage implements ITickable
 
     @Override
     public int getFieldCount() {
-        return SLOTS + 1;
+        return VISIBLE + 1;
     }
 
     @Override
