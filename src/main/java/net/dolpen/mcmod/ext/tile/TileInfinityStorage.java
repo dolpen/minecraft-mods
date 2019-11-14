@@ -1,11 +1,9 @@
 package net.dolpen.mcmod.ext.tile;
 
-import net.dolpen.mcmod.ext.setting.Constants;
+import net.dolpen.mcmod.ext.gui.GuiHandler;
 import net.dolpen.mcmod.lib.item.ItemStackUtil;
 import net.dolpen.mcmod.lib.tile.TileAdvanceStorage;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ITickable;
@@ -31,23 +29,23 @@ public class TileInfinityStorage extends TileAdvanceStorage implements ITickable
         ItemStack inStack = inventory.get(IN);
         ItemStack poolStack = inventory.get(POOL);
         ItemStack outStack = inventory.get(OUT);
-        //boolean needCommit = false;
+        boolean needCommit = false;
         // process input
         if (!inStack.isEmpty()) {
             if (outStack.isEmpty()) {
                 outStack = inStack.copy();
                 inventory.set(OUT, outStack);
                 inventory.set(IN, ItemStack.EMPTY);
-                //needCommit = true;
+                needCommit = true;
             } else if (ItemStackUtil.canMergeStrict(inStack, outStack)) {
                 if (poolStack.isEmpty()) {
                     poolStack = inStack.copy();
                     inventory.set(POOL, poolStack);
                 } else {
-                    poolStack.grow(inStack.getCount());
+                    poolStack.grow(inStack.getCount()); //?
                 }
                 inventory.set(IN, ItemStack.EMPTY);
-                //needCommit = true;
+                needCommit = true;
             }
         }
         if (!poolStack.isEmpty()) {
@@ -64,13 +62,15 @@ public class TileInfinityStorage extends TileAdvanceStorage implements ITickable
                 }
                 // out partial
                 poolStack.shrink(flow);
-                //needCommit = true;
+                needCommit = true;
             }
             if (poolStack.isEmpty() || poolStack.getCount() <= 0) {
                 inventory.set(POOL, ItemStack.EMPTY);
                 // すでに needCommit = true;
             }
         }
+        if (needCommit) markDirty();
+
     }
 
 
@@ -158,16 +158,6 @@ public class TileInfinityStorage extends TileAdvanceStorage implements ITickable
     }
 
     @Override
-    public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
-        return null;
-    }
-
-    @Override
-    public String getGuiID() {
-        return Constants.MOD_ID + ":" + getName();
-    }
-
-    @Override
     public String getName() {
         return "infinity_storage";
     }
@@ -175,5 +165,10 @@ public class TileInfinityStorage extends TileAdvanceStorage implements ITickable
     @Override
     public boolean hasCustomName() {
         return false;
+    }
+
+    @Override
+    public int getGuiId() {
+        return GuiHandler.INFINITY_STORAGE;
     }
 }

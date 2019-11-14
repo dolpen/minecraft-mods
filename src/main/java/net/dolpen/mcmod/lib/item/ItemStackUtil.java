@@ -6,7 +6,7 @@ import net.minecraftforge.oredict.OreDictionary;
 public class ItemStackUtil {
 
     public static boolean canMergeStrict(ItemStack a, ItemStack b) {
-        if (!ItemStack.areItemStacksEqual(a, b))
+        if (!ItemStack.areItemsEqual(a, b))
             return false;
         if (!ItemStack.areItemStackTagsEqual(a, b))
             return false;

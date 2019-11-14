@@ -2,10 +2,14 @@ package net.dolpen.mcmod.lib.tile;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntityLockable;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.capabilities.Capability;
@@ -16,7 +20,7 @@ import javax.annotation.Nullable;
 import java.util.Objects;
 
 
-public abstract class TileAdvanceStorage extends TileEntityLockable implements ICapabilitySerializable<NBTTagCompound> {
+public abstract class TileAdvanceStorage extends TileEntity implements IInventory, ICapabilitySerializable<NBTTagCompound> {
 
 
     protected AdvanceStorageHandler storageHandler = null;
@@ -27,9 +31,6 @@ public abstract class TileAdvanceStorage extends TileEntityLockable implements I
         inventory = NonNullList.withSize(slots, ItemStack.EMPTY);
     }
 
-    protected NonNullList<ItemStack> getItems() {
-        return this.inventory;
-    }
 
     public NBTTagCompound serializeNBT() {
         NBTTagList tags = new NBTTagList();
@@ -60,7 +61,6 @@ public abstract class TileAdvanceStorage extends TileEntityLockable implements I
     }
 
     // called from game engine
-    @Override
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
         deserializeNBT(compound);
@@ -89,17 +89,6 @@ public abstract class TileAdvanceStorage extends TileEntityLockable implements I
         NBTTagCompound outer = itemStack.getTagCompound();
         if (Objects.isNull(outer) || outer.hasKey("tileInfo")) return;
         deserializeNBT(outer.getCompoundTag("tileInfo"));
-        markDirty();
-    }
-
-    // client side receiver of accessPlayerCount
-    public boolean receiveClientEvent(int id, int value) {
-        if (id == 1) {
-            accessPlayerCount = value;
-            return true;
-        } else {
-            return super.receiveClientEvent(id, value);
-        }
     }
 
     //from server -> client accessPlayerCount
@@ -120,6 +109,23 @@ public abstract class TileAdvanceStorage extends TileEntityLockable implements I
         world.notifyNeighborsOfStateChange(this.pos, thisBlock, false);
     }
 
+    @Override
+    public SPacketUpdateTileEntity getUpdatePacket() {
+        return new SPacketUpdateTileEntity(this.pos, 0, this.writeToNBT(new NBTTagCompound()));
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
+        super.onDataPacket(net, packet);
+        this.readFromNBT(packet.getNbtCompound());
+    }
+
+    public void sync(EntityPlayer player) {
+        if (!(player instanceof EntityPlayerMP)) return;
+        EntityPlayerMP playerMP = (EntityPlayerMP) player;
+        playerMP.connection.sendPacket(getUpdatePacket());
+    }
+
 
     protected AdvanceStorageHandler createStorageHandler() {
         return new AdvanceStorageHandler(this);
@@ -138,6 +144,8 @@ public abstract class TileAdvanceStorage extends TileEntityLockable implements I
     public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
         return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
     }
+
+    public abstract int getGuiId();
 
 
 }

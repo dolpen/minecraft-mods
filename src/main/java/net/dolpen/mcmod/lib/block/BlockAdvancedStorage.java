@@ -1,5 +1,6 @@
 package net.dolpen.mcmod.lib.block;
 
+import net.dolpen.mcmod.ext.DolpenMain;
 import net.dolpen.mcmod.lib.tile.TileAdvanceStorage;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
@@ -76,8 +77,14 @@ public abstract class BlockAdvancedStorage extends Block implements IInteraction
 
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (world.isRemote) return true;
-        // have to sync NBT server -> client/EntityPlayerMP ?
-        getTileStorage(world, pos).ifPresent(player::displayGUIChest);
+        if (!player.isSneaking()) {
+            getTileStorage(world, pos).ifPresent(tileStorage -> {
+                tileStorage.sync(player);
+                player.openGui(DolpenMain.getInstance(), tileStorage.getGuiId(), world, pos.getX(), pos.getY(), pos.getZ());
+            });
+        }
+
+
         return true;
     }
 
