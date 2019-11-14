@@ -1,6 +1,6 @@
 package net.dolpen.mcmod.ext.block;
 
-import net.dolpen.mcmod.ext.gui.GUIInfinityStorageContainer;
+import net.dolpen.mcmod.ext.gui.GuiInfinityStorageContainer;
 import net.dolpen.mcmod.ext.gui.InfinityStorageContainer;
 import net.dolpen.mcmod.ext.tile.TileInfinityStorage;
 import net.dolpen.mcmod.lib.block.BlockAdvancedStorage;
@@ -42,8 +42,8 @@ public class BlockInfinityStorage extends BlockAdvancedStorage {
         return new InfinityStorageContainer(player.inventory, (TileInfinityStorage) world.getTileEntity(new BlockPos(x, y, z)));
     }
 
-    public static GUIInfinityStorageContainer getGUIContainer(EntityPlayer player, World world, int x, int y, int z) {
-        return new GUIInfinityStorageContainer(player.inventory, (TileInfinityStorage) world.getTileEntity(new BlockPos(x, y, z)));
+    public static GuiInfinityStorageContainer getGuiContainer(EntityPlayer player, World world, int x, int y, int z) {
+        return new GuiInfinityStorageContainer(player.inventory, (TileInfinityStorage) world.getTileEntity(new BlockPos(x, y, z)));
     }
 
     @Override

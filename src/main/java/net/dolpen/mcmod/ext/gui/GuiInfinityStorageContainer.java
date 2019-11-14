@@ -9,7 +9,7 @@ import net.minecraft.util.ResourceLocation;
 
 import java.text.NumberFormat;
 
-public class GUIInfinityStorageContainer extends GuiContainer {
+public class GuiInfinityStorageContainer extends GuiContainer {
 
     private static final ResourceLocation GUI_TEXTURE = new ResourceLocation(
             Constants.MOD_ID, "textures/gui/infinity_storage.png"
@@ -17,7 +17,7 @@ public class GUIInfinityStorageContainer extends GuiContainer {
     private static final NumberFormat FORMAT = NumberFormat.getNumberInstance();
     private final TileInfinityStorage tile;
 
-    public GUIInfinityStorageContainer(IInventory playerInventory, TileInfinityStorage tile) {
+    public GuiInfinityStorageContainer(IInventory playerInventory, TileInfinityStorage tile) {
         super(new InfinityStorageContainer(playerInventory, tile));
         this.tile = tile;
     }
