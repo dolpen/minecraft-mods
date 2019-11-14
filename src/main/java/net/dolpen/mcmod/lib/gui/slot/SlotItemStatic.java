@@ -1,13 +1,13 @@
 package net.dolpen.mcmod.lib.gui.slot;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.SlotItemHandler;
 
-public class SlotStatic extends Slot {
+public class SlotItemStatic extends SlotItemHandler {
 
-    public SlotStatic(IInventory inventory, int index, int x, int y) {
+    public SlotItemStatic(ItemStackHandler inventory, int index, int x, int y) {
 
         super(inventory, index, x, y);
     }

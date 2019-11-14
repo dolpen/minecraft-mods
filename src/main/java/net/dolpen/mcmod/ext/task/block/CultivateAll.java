@@ -2,11 +2,11 @@ package net.dolpen.mcmod.ext.task.block;
 
 import net.dolpen.mcmod.ext.DolpenMain;
 import net.dolpen.mcmod.ext.mod.BlockStateGroup;
-import net.dolpen.mcmod.lib.block.BlockStates;
-import net.dolpen.mcmod.lib.block.BlockUtil;
 import net.dolpen.mcmod.lib.search.CompareSearcher;
 import net.dolpen.mcmod.lib.search.comparator.IBlockComparator;
 import net.dolpen.mcmod.lib.search.walker.SixNeighborWalker;
+import net.dolpen.mcmod.lib.util.BlockStateUtil;
+import net.dolpen.mcmod.lib.util.BlockUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
@@ -19,7 +19,7 @@ public class CultivateAll extends BlockTask {
 
     // 異なるブロックでも一括耕地化
     public static final IBlockComparator CHAIN_RULE = (seeing, base) ->
-            BlockStates.matchBlockGroups(seeing, base, BlockStateGroup.HOE_TRIGGER);
+            BlockStateUtil.matchBlockGroups(seeing, base, BlockStateGroup.HOE_TRIGGER);
 
     public CultivateAll(World world, EntityPlayer player, BlockPos pos, IBlockState baseBlockState) {
         super(world, player, pos, baseBlockState);

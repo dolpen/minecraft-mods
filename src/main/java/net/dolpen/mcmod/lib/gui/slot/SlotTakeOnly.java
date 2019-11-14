@@ -1,12 +1,12 @@
 package net.dolpen.mcmod.lib.gui.slot;
 
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.SlotItemHandler;
 
-public class SlotTakeOnly extends SlotItemHandler {
+public class SlotTakeOnly extends Slot {
 
-    public SlotTakeOnly(ItemStackHandler inventory, int index, int x, int y) {
+    public SlotTakeOnly(IInventory inventory, int index, int x, int y) {
 
         super(inventory, index, x, y);
     }

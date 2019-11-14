@@ -13,11 +13,13 @@ public class BlockPropertyFilter<T extends Comparable<T>> implements IBlockState
     public final IProperty<T> property;
     public final Set<T> values;
 
+    @SafeVarargs
     private BlockPropertyFilter(IProperty<T> property, T... values) {
         this.property = property;
         this.values = Sets.newHashSet(values);
     }
 
+    @SafeVarargs
     public static <T extends Comparable<T>> BlockPropertyFilter<T> of(IProperty<T> property, T... values) {
         return new BlockPropertyFilter<>(property, values);
     }

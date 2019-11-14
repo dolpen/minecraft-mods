@@ -1,7 +1,6 @@
 package net.dolpen.mcmod.ext.gui;
 
-import net.dolpen.mcmod.ext.tile.StorageHandler;
-import net.dolpen.mcmod.ext.tile.TileStorage;
+import net.dolpen.mcmod.ext.tile.TileInfinityStorage;
 import net.dolpen.mcmod.lib.gui.slot.SlotPutOnly;
 import net.dolpen.mcmod.lib.gui.slot.SlotTakeOnly;
 import net.minecraft.entity.player.EntityPlayer;
@@ -9,39 +8,42 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.items.ItemStackHandler;
 
 import java.util.stream.IntStream;
 
-public class StorageContainer extends Container {
+public class InfinityStorageContainer extends Container {
 
 
-    private TileStorage tile;
+    private TileInfinityStorage tile;
 
-    public StorageContainer(IInventory playerInventory, final TileStorage tile) {
+    public InfinityStorageContainer(IInventory playerInventory, final TileInfinityStorage tile) {
         this.tile = tile;
-        ItemStackHandler handler = tile.getHandler();
         // 搬入
-        addSlotToContainer(new SlotPutOnly(handler, StorageHandler.IN, 8 + 18, 36));
+        addSlotToContainer(new SlotPutOnly(tile, TileInfinityStorage.IN, 8 + 18, 36));
         // 搬出
-        addSlotToContainer(new SlotTakeOnly(handler, StorageHandler.OUT, 8 + 7 * 18, 36));
+        addSlotToContainer(new SlotTakeOnly(tile, TileInfinityStorage.OUT, 8 + 7 * 18, 36));
         // これ下のやつ
         bindPlayerInventory(playerInventory);
     }
 
     protected void bindPlayerInventory(final IInventory inventoryPlayer) {
         // inventory
-        IntStream.range(0, 3).forEach(i -> {
-            IntStream.range(0, 9).forEach(j -> {
-                addSlotToContainer(
-                        new Slot(inventoryPlayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18)
-                );
-            });
-        });
+        IntStream.range(0, 3).forEach(
+                i -> IntStream.range(0, 9).forEach(
+                        j -> addSlotToContainer(
+                                new Slot(
+                                        inventoryPlayer,
+                                        j + i * 9 + 9,
+                                        8 + j * 18,
+                                        84 + i * 18
+                                )
+                        )
+                )
+        );
         // quick bar
-        IntStream.range(0, 9).forEach(j -> {
-            addSlotToContainer(new Slot(inventoryPlayer, j, 8 + j * 18, 84 +58));
-        });
+        IntStream.range(0, 9).forEach(
+                j -> addSlotToContainer(new Slot(inventoryPlayer, j, 8 + j * 18, 84 + 58))
+        );
     }
 
     public ItemStack transferStackInSlot(EntityPlayer player, int index) {
@@ -74,4 +76,5 @@ public class StorageContainer extends Container {
     public boolean canInteractWith(EntityPlayer playerIn) {
         return !playerIn.isSpectator();
     }
+
 }

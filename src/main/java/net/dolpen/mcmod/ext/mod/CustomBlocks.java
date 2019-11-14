@@ -2,7 +2,7 @@ package net.dolpen.mcmod.ext.mod;
 
 
 import com.google.common.collect.Lists;
-import net.dolpen.mcmod.ext.block.BlockStorage;
+import net.dolpen.mcmod.ext.block.BlockInfinityStorage;
 import net.dolpen.mcmod.ext.setting.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 public class CustomBlocks {
 
-    public static final Block infinity_storage = new BlockStorage();
+    public static final Block infinity_storage = new BlockInfinityStorage();
     public static final ArrayList<Entry> entries = Lists.newArrayList(
             new Entry("infinity_storage", infinity_storage)
     );
@@ -30,9 +30,11 @@ public class CustomBlocks {
     }
 
     public static void registerAllModel() {
-        entries.forEach(e -> {
-            ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(e.target), 0, e.toNormalModel());
-        });
+        entries.forEach(
+                e -> ModelLoader.setCustomModelResourceLocation(
+                        Item.getItemFromBlock(e.target), 0, e.toNormalModel()
+                )
+        );
     }
 
     public static class Entry {

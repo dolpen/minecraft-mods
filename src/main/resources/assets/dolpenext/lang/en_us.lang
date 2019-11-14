@@ -2,6 +2,6 @@
 dolpenext.key.toggle=Toggle Tool Extension
 dolpenext.message.toggle.on=Tool Extension Enabled
 dolpenext.message.toggle.off=Tool Extension Disabled
-tile.infinity_storage.name=Infinity Storage
+blockitem.infinity_storage.name=Infinity Storage
 inventory.item.empty=Empty
 inventory.item.stack=%1$d of %2$s

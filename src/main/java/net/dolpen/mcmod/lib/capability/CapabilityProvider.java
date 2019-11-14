@@ -25,7 +25,7 @@ public class CapabilityProvider<T> implements ICapabilityProvider {
 
     @Nullable
     @Override
-    public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+    public <U> U getCapability(@Nonnull Capability<U> capability, @Nullable EnumFacing facing) {
         return hasCapability(capability, facing) ? cap.cast(this.instance) : null;
     }
 }

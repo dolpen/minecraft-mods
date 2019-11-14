@@ -1,4 +1,4 @@
-package net.dolpen.mcmod.lib.block;
+package net.dolpen.mcmod.lib.util;
 
 import net.dolpen.mcmod.ext.mod.BlockStateGroup;
 import net.dolpen.mcmod.lib.search.position.Positions;

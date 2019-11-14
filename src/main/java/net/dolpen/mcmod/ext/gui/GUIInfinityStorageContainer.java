@@ -1,8 +1,7 @@
 package net.dolpen.mcmod.ext.gui;
 
 import net.dolpen.mcmod.ext.setting.Constants;
-import net.dolpen.mcmod.ext.tile.StorageHandler;
-import net.dolpen.mcmod.ext.tile.TileStorage;
+import net.dolpen.mcmod.ext.tile.TileInfinityStorage;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.inventory.IInventory;
@@ -10,15 +9,17 @@ import net.minecraft.util.ResourceLocation;
 
 import java.text.NumberFormat;
 
-public class GuiStorageContainer extends GuiContainer {
+public class GUIInfinityStorageContainer extends GuiContainer {
 
-    private static final ResourceLocation GUI_TEXTURE = new ResourceLocation(Constants.MOD_ID, "textures/gui/infinity_storage.png");
+    private static final ResourceLocation GUI_TEXTURE = new ResourceLocation(
+            Constants.MOD_ID, "textures/gui/infinity_storage.png"
+    );
     private static final NumberFormat FORMAT = NumberFormat.getNumberInstance();
-    private final StorageHandler storageHandler;
+    private final TileInfinityStorage tile;
 
-    public GuiStorageContainer(IInventory playerInventory, TileStorage tile) {
-        super(new StorageContainer(playerInventory, tile));
-        this.storageHandler = tile.getHandler();
+    public GUIInfinityStorageContainer(IInventory playerInventory, TileInfinityStorage tile) {
+        super(new InfinityStorageContainer(playerInventory, tile));
+        this.tile = tile;
     }
 
     @Override
@@ -32,17 +33,13 @@ public class GuiStorageContainer extends GuiContainer {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        int pool = storageHandler.getStackInSlot(StorageHandler.POOL).getCount();
-        if (pool <= 0) return;
+        int stored = tile.getField(3); // all stored count!
         this.drawCenteredString(
                 this.fontRenderer,
-                FORMAT.format(
-                        storageHandler.getStackInSlot(StorageHandler.POOL).getCount()
-                ) + " + ",
+                FORMAT.format(stored),
                 this.xSize / 2,
                 36 + 4,
                 0
         );
     }
-
 }

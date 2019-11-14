@@ -13,7 +13,7 @@ public class Positions {
      * ドロップアイテムを集約するときの座標などに。
      *
      * @param player 対象プレイヤー
-     * @return
+     * @return だいたい足元
      */
     public static BlockPos foot(@Nonnull EntityPlayer player) {
         double direction = Math.PI * player.rotationYaw / 180;
