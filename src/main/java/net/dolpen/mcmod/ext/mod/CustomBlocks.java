@@ -47,7 +47,7 @@ public class CustomBlocks {
         }
 
         public Item toItemBlock() {
-            return new ItemBlock(target).setRegistryName(Constants.MOD_ID, name);
+            return new ItemBlock(target).setUnlocalizedName(name).setRegistryName(Constants.MOD_ID, name);
         }
 
 

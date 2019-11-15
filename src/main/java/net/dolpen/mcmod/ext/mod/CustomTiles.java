@@ -18,13 +18,7 @@ public class CustomTiles {
 
     public static void registerAllTile() {
         entries.forEach(
-                e -> GameRegistry.registerTileEntity(
-                        e.target,
-                        new ResourceLocation(
-                                Constants.MOD_NAME,
-                                e.name
-                        )
-                )
+                e -> GameRegistry.registerTileEntity(e.target, e.toResourceKey())
         );
     }
 
@@ -36,6 +30,11 @@ public class CustomTiles {
             this.name = name;
             this.target = tileEntity;
         }
+
+        public ResourceLocation toResourceKey() {
+            return new ResourceLocation(Constants.MOD_ID, name);
+        }
+
     }
 
 }

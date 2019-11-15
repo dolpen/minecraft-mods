@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
 import java.util.Optional;
 
 // Custom Storage Container(like vanilla BlockContainer)
-public abstract class BlockAdvancedStorage extends Block implements IInteractionObject, ITileEntityProvider {
+public abstract class BlockAdvancedStorage extends Block implements ITileEntityProvider {
 
 
     protected BlockAdvancedStorage(Material material) {

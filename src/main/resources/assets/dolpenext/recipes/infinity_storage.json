@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "aba",
+    "aca",
+    "aba"
+  ],
+  "key": {
+    "a": {
+      "item": "minecraft:chest",
+      "data": 0
+    },
+    "b": {
+      "item": "minecraft:ender_chest",
+      "data": 0
+    },
+    "c": {
+      "item": "minecraft:ender_eye",
+      "data": 0
+    }
+  },
+  "result": {
+    "item": "dolpenext:infinity_storage",
+    "count": 1,
+    "data": 0
+  }
+}
