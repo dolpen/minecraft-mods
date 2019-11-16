@@ -59,14 +59,15 @@ public class BlockInfinityStorage extends BlockAdvancedStorage {
     // GUI
 
     public String displayNBTItemStack(ItemStack itemStack) {
-        if (itemStack.isEmpty() || !itemStack.hasTagCompound())
+        if (itemStack.isEmpty() || !itemStack.hasTagCompound()) {
             return I18n.format("inventory.item.empty");
-        NBTTagCompound tileInfo = itemStack.getTagCompound().getCompoundTag("tileInfo");
-        NBTTagList tags = tileInfo.getTagList("Items", Constants.NBT.TAG_COMPOUND);
+        }
+        NBTTagCompound tileInfo = itemStack.getTagCompound().getCompoundTag(TileInfinityStorage.KEY_TILE_INFO);
+        NBTTagList tags = tileInfo.getTagList(TileInfinityStorage.KEY_ITEMS, Constants.NBT.TAG_COMPOUND);
         NBTTagCompound pool = tags.getCompoundTagAt(TileInfinityStorage.POOL);
-        NBTTagCompound out = tags.getCompoundTagAt(TileInfinityStorage.POOL);
-        int count = pool.getInteger("Quantity") + out.getInteger("Quantity");
-        ItemStack dummy = new ItemStack(pool);
+        NBTTagCompound out = tags.getCompoundTagAt(TileInfinityStorage.OUT);
+        int count = pool.getInteger(TileInfinityStorage.KEY_QUANTITY) + out.getInteger(TileInfinityStorage.KEY_QUANTITY);
+        ItemStack dummy = new ItemStack(out);
         dummy.setCount(count);
         return dummy.isEmpty()
                 ? I18n.format("inventory.item.empty")

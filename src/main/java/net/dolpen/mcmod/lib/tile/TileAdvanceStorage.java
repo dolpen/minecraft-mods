@@ -27,35 +27,39 @@ public abstract class TileAdvanceStorage extends TileEntity implements IInventor
     protected NonNullList<ItemStack> inventory;
     protected int accessPlayerCount = 0;
 
+    public static String KEY_QUANTITY = "Quantity";
+    public static String KEY_SLOT = "Slot";
+    public static String KEY_ITEMS = "Items";
+    public static String KEY_TILE_INFO = "TileInfo";
+
     public TileAdvanceStorage(int slots) {
         inventory = NonNullList.withSize(slots, ItemStack.EMPTY);
     }
-
 
     public NBTTagCompound serializeNBT() {
         NBTTagList tags = new NBTTagList();
         for (int i = 0; i < inventory.size(); i++) {
             ItemStack seeing = inventory.get(i);
             NBTTagCompound tag = new NBTTagCompound();
-            tag.setInteger("Slot", i);
-            tag.setInteger("Quantity", seeing.getCount());
+            tag.setInteger(KEY_SLOT, i);
+            tag.setInteger(KEY_QUANTITY, seeing.getCount());
             inventory.get(i).writeToNBT(tag);
             tags.appendTag(tag);
         }
         NBTTagCompound nbt = new NBTTagCompound();
-        nbt.setTag("Items", tags);
+        nbt.setTag(KEY_ITEMS, tags);
         return nbt;
     }
 
     @Override
     public void deserializeNBT(NBTTagCompound nbt) {
-        NBTTagList tags = nbt.getTagList("Items", net.minecraftforge.common.util.Constants.NBT.TAG_COMPOUND);
+        NBTTagList tags = nbt.getTagList(KEY_ITEMS, net.minecraftforge.common.util.Constants.NBT.TAG_COMPOUND);
         for (int i = 0; i < tags.tagCount(); i++) {
             NBTTagCompound tag = tags.getCompoundTagAt(i);
-            int slot = tag.getInteger("Slot");
+            int slot = tag.getInteger(KEY_SLOT);
             if (slot < 0 || slot >= inventory.size()) continue;
             inventory.set(slot, new ItemStack(tag));
-            inventory.get(slot).setCount(tag.getInteger("Quantity"));
+            inventory.get(slot).setCount(tag.getInteger(KEY_QUANTITY));
         }
         onLoad();
     }
@@ -77,7 +81,7 @@ public abstract class TileAdvanceStorage extends TileEntity implements IInventor
     // called from block.harvestBlock(serialize for ItemStack)
     public ItemStack toItemStackWithNBT(Block block) {
         NBTTagCompound outer = new NBTTagCompound();
-        outer.setTag("tileInfo", writeToNBT(new NBTTagCompound()));
+        outer.setTag(KEY_TILE_INFO, writeToNBT(new NBTTagCompound()));
         ItemStack dropStack = new ItemStack(block, 1);
         dropStack.setTagCompound(outer);
         return dropStack;
@@ -87,8 +91,8 @@ public abstract class TileAdvanceStorage extends TileEntity implements IInventor
     public void fromItemStackWithNBT(ItemStack itemStack) {
         if (!itemStack.hasTagCompound()) return;
         NBTTagCompound outer = itemStack.getTagCompound();
-        if (Objects.isNull(outer) || outer.hasKey("tileInfo")) return;
-        deserializeNBT(outer.getCompoundTag("tileInfo"));
+        if (Objects.isNull(outer) || !outer.hasKey(KEY_TILE_INFO)) return;
+        deserializeNBT(outer.getCompoundTag(KEY_TILE_INFO));
     }
 
     //from server -> client accessPlayerCount

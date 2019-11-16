@@ -109,6 +109,7 @@ public class TileInfinityStorage extends TileAdvanceStorage implements ITickable
 
     @Override
     public ItemStack removeStackFromSlot(int slot) {
+        if (!validateAccessibleSlot(slot)) return ItemStack.EMPTY;
         return ItemStackHelper.getAndRemove(inventory, slot);
     }
 
