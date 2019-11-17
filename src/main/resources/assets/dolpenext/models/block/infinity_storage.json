@@ -1,0 +1,7 @@
+{
+  "parent": "block/cube_column",
+  "textures": {
+    "end": "dolpenext:blocks/storage_end",
+    "side": "dolpenext:blocks/storage_side"
+  }
+}
