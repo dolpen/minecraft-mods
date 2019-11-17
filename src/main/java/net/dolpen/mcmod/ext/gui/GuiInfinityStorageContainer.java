@@ -22,6 +22,16 @@ public class GuiInfinityStorageContainer extends GuiContainer {
         this.tile = tile;
     }
 
+
+    /**
+     * Draws the screen and all the components in it.
+     */
+    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        this.drawWorldBackground(0);
+        super.drawScreen(mouseX, mouseY, partialTicks);
+        this.renderHoveredToolTip(mouseX, mouseY);
+    }
+
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
@@ -33,6 +43,7 @@ public class GuiInfinityStorageContainer extends GuiContainer {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
         int stored = tile.getField(3); // all stored count!
         this.drawCenteredString(
                 this.fontRenderer,
