@@ -44,20 +44,32 @@ public class BlockStateGroup {
                             BlockStateFilter.ofDict("gravel"),
                             BlockBreakToolFilter.DIG
                     )
+            ),
+            of(
+                    CompositeBlockStateFilter.all(
+                            BlockStateFilter.ofName("minecraft:soul_sand"),
+                            BlockBreakToolFilter.DIG
+                    )
             )
     };
 
     public static final BlockStateGroup DIG_TRIGGER = union(DIG_CHAIN);
 
 
-    public static final BlockStateGroup MINE_RS_CHAIN = BlockStateGroup.of(
+    // これらは1グループであって欲しい
+    public static final BlockStateGroup MINE_RS_CHAIN = of(
             CompositeBlockStateFilter.anyName(
                     "minecraft:lit_redstone_ore",
                     "minecraft:redstone_ore"
             )
     );
+
+    // ブロック名を突き合わせするための対象
     public static final BlockStateGroup MINE_BLOCK_CHAIN = of(
-            BlockStateFilter.ofName("minecraft:obsidian")
+            CompositeBlockStateFilter.anyName(
+                    "minecraft:obsidian",
+                    "minecraft:glowstone"
+            )
     );
 
     /*
